@@ -1,7 +1,7 @@
 from util.constants import REPLY_CODES
 from flask import jsonify
 from picamera import PiCamera
-from time import sleep
+import time
 import requests
 
 
@@ -23,7 +23,7 @@ def reply_json(code, msg=None, data=None):
 
 def captureFace():
     camera = PiCamera()
-    sleep(1)
+    time.sleep(1)
     camera.capture('picture/image.jpg')
     camera.close()
 
