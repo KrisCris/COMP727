@@ -2,6 +2,8 @@ from util.constants import REPLY_CODES
 from flask import jsonify
 from picamera import PiCamera
 from time import sleep
+import requests
+
 
 def reply_json(code, msg=None, data=None):
     if data is None:
@@ -43,3 +45,21 @@ def get_indoor_temp():
 		return '%0.1f' % temp_data
 	else:
 		return None
+
+
+def get_outdoor_weather():
+	ip = requests.get('http://ifconfig.me/ip', timeout=1).text.strip()
+	location = requests.get('http://api.ipstack.com/'+ip+'?access_key=b9553ca98642d0f3a7e88f8ad16141a0').json()
+	lon = str(location.get("longitude"))
+	lat = str(location.get("latitude"))
+	weather = requests.get('http://api.openweathermap.org/data/2.5/weather?appid=3c47f6b2f1a633f74b5b5452edd29ce9&units=metric&lat='+lat+'&lon='+lon).json()
+	weather['weather'][0]['icon'] = "http://openweathermap.org/img/w/"+weather['weather'][0]['icon']+".png"
+	return weather
+
+
+def get_current_time():
+    return int(time.time())
+
+
+def get_time_gap(old):
+    return int(time.time()) - old

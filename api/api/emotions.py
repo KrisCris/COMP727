@@ -5,7 +5,7 @@ import json
 from flask import Blueprint, request
 from util.utils import reply_json
 from util.utils import captureFace
-faceRecognize = Blueprint('faceRecognize',__name__)
+emotions = Blueprint('emotions',__name__)
 
 class FaceRecog:
     def __init__(self):
@@ -34,7 +34,7 @@ class FaceRecog:
             response = requests.post(request_url, data=jsonData, headers=headers)
             return response
 
-@faceRecognize.route('/getEmotion',methods=['GET'])
+@emotions.route('/getEmotion',methods=['GET'])
 def getEmotion():
     captureFace()
     faceRe = FaceRecog()

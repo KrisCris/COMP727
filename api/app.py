@@ -1,7 +1,7 @@
 from flask import Flask
 
 from api.surroundings import surroundings
-from api.faceRecog import faceRecognize
+from api.emotions import emotions
 
 from database.db import db
 
@@ -15,7 +15,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://%s:%s@%s:%s/%s' % (
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 app.register_blueprint(surroundings,url_prefix='/surroundings')
-app.register_blueprint(faceRecognize, url_prefix='/faceRecognize')
+app.register_blueprint(emotions, url_prefix='/emotions')
 
 if __name__ == '__main__':
     with app.app_context():
