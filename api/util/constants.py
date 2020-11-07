@@ -12,7 +12,10 @@ ENV = 'development'
 
 
 REPLY_CODES = {
+    3: 'idle',
+    2: 'Working stopped',
     1: 'Success',
+    0: 'Error',
     -1: "Haven't finished since last work",
     -2: 'Should start a new work first'
 }

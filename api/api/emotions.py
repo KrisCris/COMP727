@@ -2,9 +2,13 @@ import requests
 import base64
 import json
 from flask import Blueprint, request
-from util.utils import reply_json
-from util.utils import captureFace
+from util.utils import reply_json, captureFace, get_time_gap, get_current_time
+from database.Working import Working
+from database.Emotions import Emotions
+
 emotions = Blueprint('emotions',__name__)
+
+last_success_time = 0
 
 class FaceRecog:
     def __init__(self):
@@ -35,20 +39,39 @@ class FaceRecog:
 
 @emotions.route('/getEmotion',methods=['GET'])
 def getEmotion():
+    global last_success_time
+    
     captureFace()
     faceRe = FaceRecog()
     res = faceRe.recog("picture/image.jpg")
     if(not res):
-        return reply_json(0,"face detect failed")
+        return reply_json(0)
 
     res = res.json()
     print(res)
+    working_stat = Working.isWorking()
     if(res['result'] == None):
-        return reply_json(0,"face detect failed")
+        if working_stat:
+            time_gap = get_time_gap(last_success_time)
+            if time_gap > 3*60:
+                if Working.stop_working():
+                    print(2)
+                    return reply_json(2)
+                else:
+                    print('finish working failed.')
+                    return reply_json(3)
+        return reply_json(3)
 
+    if not working_stat:
+        last_success_time = get_current_time()
+        working_stat = Working.begin_working()
+        if not working_stat:
+            print('already working')
     expression = res['result']['face_list'][0]['expression']['type']
     emotion = res['result']['face_list'][0]['emotion']['type']
-    return reply_json(1,data={'expression':expression, 'emotion':emotion})
+    Emotions.add(Emotions(emotion))
+    last_success_time = get_current_time()
+    return reply_json(1,data={'expression':expression, 'emotion':emotion, 'begin_time':Working.isWorking().begin_time})
 
 if __name__ == "__main__":
     faceRe = FaceRecog()

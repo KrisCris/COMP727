@@ -2,7 +2,6 @@ from flask import Flask
 
 from api.surroundings import surroundings
 from api.emotions import emotions
-from api.working import working
 
 from database.db import db
 
@@ -17,7 +16,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 app.register_blueprint(surroundings,url_prefix='/surroundings')
 app.register_blueprint(emotions, url_prefix='/emotions')
-app.register_blueprint(working, url_prefix='/working')
 
 if __name__ == '__main__':
     with app.app_context():

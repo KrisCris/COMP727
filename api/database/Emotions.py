@@ -10,7 +10,7 @@ class Emotions(db.Model):
 
     def __init__(self, emotion):
         self.emotion = emotion
-        self.time = get_current_time
+        self.time = get_current_time()
 
 
     def add(self):
