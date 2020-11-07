@@ -5,6 +5,7 @@ from flask import Blueprint, request
 from util.utils import reply_json, captureFace, get_time_gap, get_current_time
 from database.Working import Working
 from database.Emotions import Emotions
+from util.SC import SC
 
 emotions = Blueprint('emotions',__name__)
 
@@ -13,7 +14,7 @@ last_success_time = 0
 class FaceRecog:
     def __init__(self):
         # client_id 为官网获取的AK， client_secret 为官网获取的SK
-        host = 'https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=wm8zkBBzjlenarSlfx481Y8Q&client_secret=OmOEawYr2Glc9cniKCd1AR4S2oqif9kr'
+        host = 'https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&'+ SC['baidu_face']
         response = requests.get(host)
         if(response):
             res = response.json()
@@ -50,6 +51,9 @@ def getEmotion():
     res = res.json()
     print(res)
     working_stat = Working.isWorking()
+    if working_stat and last_success_time == 0:
+        Working.stop_working()
+        working_stat = Working.isWorking()
     if(res['result'] == None):
         if working_stat:
             time_gap = get_time_gap(last_success_time)
@@ -69,6 +73,8 @@ def getEmotion():
             print('already working')
     expression = res['result']['face_list'][0]['expression']['type']
     emotion = res['result']['face_list'][0]['emotion']['type']
+    if not emotion:
+        return reply_json(3)
     Emotions.add(Emotions(emotion))
     last_success_time = get_current_time()
     return reply_json(1,data={'expression':expression, 'emotion':emotion, 'begin_time':Working.isWorking().begin_time})
