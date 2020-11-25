@@ -1021,6 +1021,11 @@
     ts-node "^8"
     tslib "^1"
 
+"@fortawesome/fontawesome-free@^5.15.1":
+  version "5.15.1"
+  resolved "https://registry.npm.taobao.org/@fortawesome/fontawesome-free/download/@fortawesome/fontawesome-free-5.15.1.tgz#ccfef6ddbe59f8fe8f694783e1d3eb88902dc5eb"
+  integrity sha1-zP723b5Z+P6PaUeD4dPriJAtxes=
+
 "@hapi/address@2.x.x":
   version "2.1.4"
   resolved "https://registry.npm.taobao.org/@hapi/address/download/@hapi/address-2.1.4.tgz?cache=0&sync_timestamp=1603524710662&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40hapi%2Faddress%2Fdownload%2F%40hapi%2Faddress-2.1.4.tgz"
@@ -5027,6 +5032,13 @@ ecc-jsbn@~0.1.1:
     jsbn "~0.1.0"
     safer-buffer "^2.1.0"
 
+echarts@^4.9.0:
+  version "4.9.0"
+  resolved "https://registry.npm.taobao.org/echarts/download/echarts-4.9.0.tgz?cache=0&sync_timestamp=1603712757840&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fecharts%2Fdownload%2Fecharts-4.9.0.tgz#a9b9baa03f03a2a731e6340c55befb57a9e1347d"
+  integrity sha1-qbm6oD8Doqcx5jQMVb77V6nhNH0=
+  dependencies:
+    zrender "4.3.2"
+
 ee-first@1.1.1:
   version "1.1.1"
   resolved "https://registry.npm.taobao.org/ee-first/download/ee-first-1.1.1.tgz"
@@ -7650,6 +7662,13 @@ kind-of@^6.0.0, kind-of@^6.0.2:
   version "6.0.3"
   resolved "https://registry.npm.taobao.org/kind-of/download/kind-of-6.0.3.tgz"
   integrity sha1-B8BQNKbDSfoG4k+jWqdttFgM5N0=
+
+kuan-vue-flip-clock@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npm.taobao.org/kuan-vue-flip-clock/download/kuan-vue-flip-clock-1.0.1.tgz#31fbee4744eb25657cf53e5ce179bfc1a479fb6c"
+  integrity sha1-MfvuR0TrJWV89T5c4Xm/waR5+2w=
+  dependencies:
+    "@babel/runtime" "^7.5.4"
 
 latest-version@^3.0.0:
   version "3.1.0"
@@ -12405,3 +12424,8 @@ zen-observable@^0.8.0:
   version "0.8.15"
   resolved "https://registry.npm.taobao.org/zen-observable/download/zen-observable-0.8.15.tgz"
   integrity sha1-lkFcUS2OP/2SCv04iWBOMLnqrBU=
+
+zrender@4.3.2:
+  version "4.3.2"
+  resolved "https://registry.npm.taobao.org/zrender/download/zrender-4.3.2.tgz?cache=0&sync_timestamp=1603693359004&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fzrender%2Fdownload%2Fzrender-4.3.2.tgz#ec7432f9415c82c73584b6b7b8c47e1b016209c6"
+  integrity sha1-7HQy+UFcgsc1hLa3uMR+GwFiCcY=
