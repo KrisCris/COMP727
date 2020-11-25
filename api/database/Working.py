@@ -1,5 +1,8 @@
 from database.db import db
 from util.utils import get_current_time
+import requests 
+from util.SC import SC
+
 
 class Working(db.Model):
     __tablename__ = 'working'
@@ -21,13 +24,14 @@ class Working(db.Model):
         db.session.commit()
 
     @staticmethod
-    def stop_working():
-        end_time = get_current_time()
+    def stop_working(time=get_current_time()):
         last_work = Working.isWorking()
         if last_work is not None:
-            last_work.end_time = end_time
+            last_work.end_time = time
             Working.add(last_work)
             print('end working')
+            duration = (last_work.end_time - last_work.begin_time)/60
+            res = requests.get('https://api.thingspeak.com/update?'+SC['thingspeak']+'field6='+str(duration))
             return last_work
         else:
             return None

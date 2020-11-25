@@ -9,6 +9,7 @@ from database.db import db
 
 from util.constants import HOST, PORT, DEBUG, ENV
 from util.constants import DB_USERNAME, DB_PASSWORD, DB_ADDRESS, DB_PORT, DATABASE
+import RPi.GPIO as GPIO
 
 app = Flask(__name__)
 
@@ -25,5 +26,7 @@ if __name__ == '__main__':
     with app.app_context():
         db.init_app(app)
         db.create_all()
+    GPIO.setwarnings(False)
+    GPIO.setmode(GPIO.BCM)
 
     app.run(host=HOST, port=PORT, debug=DEBUG)

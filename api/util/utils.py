@@ -30,22 +30,37 @@ def captureFace():
 
 
 def get_indoor_temp():
-	import os
-	ds18b20 = ''
-	for i in os.listdir('/sys/bus/w1/devices'):
-		if i != 'w1_bus_master1':
-			ds18b20 = i
-	location = '/sys/bus/w1/devices/' + ds18b20 + '/w1_slave'
+	# import os
+	# ds18b20 = ''
+	# for i in os.listdir('/sys/bus/w1/devices'):
+	# 	if i != 'w1_bus_master1':
+	# 		ds18b20 = i
+	# location = '/sys/bus/w1/devices/' + ds18b20 + '/w1_slave'
 
-	tfile = open(location)
-	text = tfile.read()
-	tfile.close()
-	temp_data = float(text.split(" ")[-1][2:])/1000
+	# tfile = open(location)
+	# text = tfile.read()
+	# tfile.close()
+	# temp_data = float(text.split(" ")[-1][2:])/1000
 
-	if temp_data != None:
-		return '%0.1f' % temp_data
+	# if temp_data != None:
+	# 	return '%0.1f' % temp_data
+	# else:
+	# 	return None
+
+	import util.dht11 as dht11
+
+	# read data using pin 14
+	instance = dht11.DHT11(pin = 22)
+	result = instance.read()
+
+	if result.is_valid():
+		print("Temperature: %-3.1f C" % result.temperature)
+		print("Humidity: %-3.1f %%" % result.humidity)
+		return [result.temperature, result.humidity]
 	else:
-		return None
+		print("Error: %d" % result.error_code)
+		return False
+
 
 
 def get_outdoor_weather():
@@ -64,3 +79,14 @@ def get_current_time():
 
 def get_time_gap(old):
     return int(time.time()) - old
+
+def get_weighted_value(ori):
+	if ori >= 0.9:
+		ori = ori*3/2
+	elif ori >= 0.7:
+		ori = ori*6/5
+	elif ori >= 0.5:
+		ori = ori*5/6
+	else:
+		ori = ori/2
+	return ori

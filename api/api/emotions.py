@@ -1,8 +1,9 @@
 import requests 
 import base64
 import json
+import time
 from flask import Blueprint, request
-from util.utils import reply_json, captureFace, get_time_gap, get_current_time
+from util.utils import reply_json, captureFace, get_time_gap, get_current_time, get_weighted_value
 from database.Working import Working
 from database.Emotions import Emotions
 from util.SC import SC
@@ -41,29 +42,81 @@ class FaceRecog:
 @emotions.route('/getEmotion',methods=['GET'])
 def getEmotion():
     global last_success_time
+
+    if last_success_time == 0 and Working.isWorking():
+        t = Emotions.get_last_timestamp()
+        if get_time_gap(t) > 120:
+            Working.stop_working(time=t)
+        else:
+            last_success_time = t
     
-    captureFace()
-    faceRe = FaceRecog()
-    res = faceRe.recog("picture/image.jpg")
-    if(not res):
+    map = {
+        "angry":1, 
+        "fear":2,
+        "sad":3, 
+        "neutral":4,
+        "surprise":5,
+        "happy":6
+    }
+
+    prob = [0,0,0,0,0,0]
+
+    res = [None, None, None]
+    count = 0
+    for i in range(5):
+        if count >= 3:
+            break
+        captureFace()
+        faceRe = FaceRecog()
+        if not res:
+            continue
+        res[count] = faceRe.recog("picture/image.jpg").json()
+        print(res[count])
+        count += 1
+        time.sleep(0.5)
+
+    if count == 0:
         return reply_json(0)
 
-    res = res.json()
-    print(res)
+    hasFace = 0
+    for i in range(count):
+        if res[i]['result'] != None and res[i]['result']['face_num']>0:
+            hasFace += 1
+            e = res[i]['result']['face_list'][0]['emotion']['type']
+            p = res[i]['result']['face_list'][0]['emotion']['probability']
+            if p < 0.2:
+                break
+            if e in map:
+                prob[map[e]-1] += get_weighted_value(p)
+            else:
+                prob[3] += get_weighted_value(0.5)
+
+    emotion = 0
+    init = 0.8
+    if hasFace > 0:
+        for i in range(len(prob)):
+            if prob[i] > init:
+                init = prob[i]
+                emotion = i + 1
+        if emotion == 0:
+            emotion = 4
+
+    print("emotion = "+list(map.keys())[emotion-1]+"\t"+str(max(prob)))
+
     working_stat = Working.isWorking()
     if working_stat and last_success_time == 0:
         Working.stop_working()
         working_stat = Working.isWorking()
-    if(res['result'] == None):
+    if not hasFace > 0:
         if working_stat:
             time_gap = get_time_gap(last_success_time)
-            if time_gap > 3*60:
+            if time_gap > 120:
                 if Working.stop_working():
-                    print(2)
                     return reply_json(2)
                 else:
                     print('finish working failed.')
                     return reply_json(3)
+        res = requests.get('https://api.thingspeak.com/update?'+SC['thingspeak']+'field5=0')
         return reply_json(3)
 
     if not working_stat:
@@ -71,13 +124,12 @@ def getEmotion():
         working_stat = Working.begin_working()
         if not working_stat:
             print('already working')
-    expression = res['result']['face_list'][0]['expression']['type']
-    emotion = res['result']['face_list'][0]['emotion']['type']
-    if not emotion:
-        return reply_json(3)
-    Emotions.add(Emotions(emotion))
+
+    Emotions.add(Emotions(list(map.keys())[emotion-1]))
     last_success_time = get_current_time()
-    return reply_json(1,data={'expression':expression, 'emotion':emotion, 'begin_time':Working.isWorking().begin_time})
+
+    res = requests.get('https://api.thingspeak.com/update?'+SC['thingspeak']+'field1='+str(emotion)+'&field5=1')
+    return reply_json(1,data={'emotion':list(map.keys())[emotion-1], 'begin_time':Working.isWorking().begin_time})
 
 if __name__ == "__main__":
     faceRe = FaceRecog()

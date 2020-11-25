@@ -3,3 +3,5 @@ mysqlclient~=2.0.1
 Flask-SQLAlchemy~=2.4.4
 picamera~=1.13
 requests~=2.24.0
+numpy~=1.19.4
+RPi.GPIO~=0.7.0

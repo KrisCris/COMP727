@@ -20,3 +20,7 @@ class Emotions(db.Model):
     def delete(self):
         db.session.delete(self)
         db.session.commit()
+
+    @staticmethod
+    def get_last_timestamp():
+        return Emotions.query.order_by(Emotions.id.desc()).first().time
