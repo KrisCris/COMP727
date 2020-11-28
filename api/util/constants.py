@@ -7,6 +7,7 @@ DB_CHARSET = 'utf8mb4'
 
 HOST = '0.0.0.0'
 PORT = 5000
+WSP = 5050
 DEBUG = True
 ENV = 'development'
 
