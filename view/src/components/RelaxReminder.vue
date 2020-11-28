@@ -25,7 +25,7 @@ export default {
   data: () => ({
     init:false,
     existsTime: "0",
-    remindText: "Time to Relax !!!",
+    remindText: "It seems you need take a rest :)",
     needRemind: false,
     threshouldTime: 30,
     remindGap: 30,
@@ -80,6 +80,8 @@ export default {
     },
     remind() {
       this.needRemind = true;
+      var that = this;
+      that.$axios.get("/emotions/playSong")
     },
   },
 };
