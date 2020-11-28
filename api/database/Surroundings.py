@@ -23,3 +23,8 @@ class Surroundings(db.Model):
     def delete(self):
         db.session.delete(self)
         db.session.commit()
+
+    @staticmethod
+    def get_latest_indoor():
+        s = Surroundings.query.order_by(Surroundings.id.desc()).first()
+        return [s.indoor_tmp,s.indoor_hmd,s.id]
