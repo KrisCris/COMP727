@@ -56,7 +56,7 @@
                     style="width: 93%"
                     ref="reminder"
                   />
-                   <!-- ↑ ref='reminder' 表示将该组件命名为reminder,以便在下方js代码中用$refs属性获取 -->
+                  <!-- ↑ ref='reminder' 表示将该组件命名为reminder,以便在下方js代码中用$refs属性获取 -->
                 </v-row>
               </v-col>
             </v-row>
@@ -126,7 +126,7 @@ export default {
     //保存天气数据
     weather: "",
     //保存时间选择器的数据
-    picker: "",
+    picker: "00:30",
   }),
   methods: {
     //更新表情图表
@@ -139,8 +139,8 @@ export default {
       //调用reminder组件的formatDate函数
       this.$refs.reminder.formatDate(date);
     },
-    emotionRemind(){
-      this.$refs.reminder.remind()
+    emotionRemind() {
+      this.$refs.reminder.remind();
     },
     //获取天气
     getWeather() {
@@ -161,37 +161,50 @@ export default {
         setTimeout(function () {
           that.getWeather();
         }, 30000);
-      });
+      }).catch(function (error) {
+          console.log("Indoor_temp遇到错误：\t" + error);
+          setTimeout(function () {
+            that.getFace();
+          }, 5000);
+        });
     },
     //获取温度湿度
     getTemperature() {
       var that = this;
       //调用后端接口
-      that.$axios.get("/surroundings/indoor_weather").then((res) => {
-        if (res) {
-          res = res.data;
-          if (res.code == 1) {
-            console.log(res);
-            that.temperature = res.data.tmp;
-            that.humidity = res.data.hmd;
-            //分别调用humidity和temperature组件的updateData函数
-            that.$refs.humidity.updateData(that.humidity);
-            that.$refs.temperature.updateData(that.temperature);
+      that.$axios
+        .get("/surroundings/indoor_weather")
+        .then((res) => {
+          if (res) {
+            res = res.data;
+            if (res.code == 1) {
+              console.log(res);
+              that.temperature = res.data.tmp;
+              that.humidity = res.data.hmd;
+              //分别调用humidity和temperature组件的updateData函数
+              that.$refs.humidity.updateData(that.humidity);
+              that.$refs.temperature.updateData(that.temperature);
 
-            var time = new Date().toLocaleTimeString().replace(/^\D*/, "");
-            //调用tempChart组件的updateChart函数
-            that.$refs.tempChart.updateChart(
-              time,
-              that.temperature,
-              that.humidity
-            );
+              var time = new Date().toLocaleTimeString().replace(/^\D*/, "");
+              //调用tempChart组件的updateChart函数
+              that.$refs.tempChart.updateChart(
+                time,
+                that.temperature,
+                that.humidity
+              );
+            }
           }
-        }
-        //获取到后端数据后,设置5秒的计时器，5秒后再次执行当前函数
-        setTimeout(function () {
-          that.getTemperature();
-        }, 5000);
-      });
+          //获取到后端数据后,设置5秒的计时器，5秒后再次执行当前函数
+          setTimeout(function () {
+            that.getTemperature();
+          }, 5000);
+        })
+        .catch(function (error) {
+          console.log("Indoor_temp遇到错误：\t" + error);
+          setTimeout(function () {
+            that.getFace();
+          }, 5000);
+        });
     },
   },
   //页面加载完毕后立刻执行的函数
