@@ -19,11 +19,11 @@ export default {
       }
       var opt = this.chart.getOption();
       var data = opt.series[0].data;
-      if (opt.xAxis[0].data.length > 10) {
+      if (opt.xAxis[0].data.length > 1440) {
         opt.xAxis[0].data.shift();
       }
       opt.xAxis[0].data.push(x);
-      if (data.length > 10) {
+      if (data.length > 1440) {
         data.shift();
       }
       data.push(y);
@@ -41,16 +41,16 @@ export default {
         xAxis: {
           type: "category",
           data: [
-            "00:00",
-            "00:00",
-            "00:00",
-            "00:00",
-            "00:00",
-            "00:00",
-            "00:00",
-            "00:00",
-            "00:00",
-            "00:00",
+            // "00:00",
+            // "00:00",
+            // "00:00",
+            // "00:00",
+            // "00:00",
+            // "00:00",
+            // "00:00",
+            // "00:00",
+            // "00:00",
+            // "00:00",
           ],
           axisLabel: {
             show: true,
@@ -75,8 +75,20 @@ export default {
         },
         series: [
           {
-            data: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+            data: [
+              // 3,
+              // 3, 
+              // 3, 
+              // 3, 
+              // 3, 
+              // 3, 
+              // 3, 
+              // 3, 
+              // 3, 
+              // 3
+              ],
             type: "line",
+            symbol: "none",
             smooth: true,
           },
         ],
