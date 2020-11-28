@@ -1,5 +1,5 @@
 from database.db import db
-from util.utils import get_current_time
+from util.utils import get_current_time, get_zero_clock
 import requests 
 from util.SC import SC
 
@@ -58,3 +58,8 @@ class Working(db.Model):
                 return None
         else:
             return None
+
+    
+    @staticmethod
+    def getTodayWorkRecords():
+        return Working.query.filter(Working.begin_time>get_zero_clock()).all()
