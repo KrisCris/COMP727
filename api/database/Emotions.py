@@ -65,7 +65,7 @@ class Emotions(db.Model):
         data = [{},{},{},{}]
         index = 0
         for t in begin:
-            res = Emotions.query.filter(Emotions.time>t).all()
+            res = Emotions.query.order_by(Emotions.time.asc()).filter(Emotions.time>t).all()
             if res is not None:
                 for r in res:
                     h = time.localtime(r.time).tm_hour
