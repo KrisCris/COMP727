@@ -80,6 +80,7 @@
           <v-col>
             <div style="height: 50px"></div>
             <v-row justify="center">
+              <img v-bind:src="pic" alt="" style="width:150px;height:150px;margin-top:70px"/>
               <v-time-picker
                 v-model="picker"
                 :landscape="$vuetify.breakpoint.smAndUp"
@@ -127,6 +128,7 @@ export default {
     weather: "",
     //保存时间选择器的数据
     picker: "00:30",
+    pic: "",
   }),
   methods: {
     //更新表情图表
@@ -146,22 +148,25 @@ export default {
     getWeather() {
       var that = this;
       //调用后端接口
-      that.$axios.get("/surroundings/outdoor_weather").then((res) => {
-        if (res) {
-          res = res.data;
-          if (res.code == 1) {
-            console.log(res);
-            that.weather = res.data["weather"];
-            console.log(that.weather);
-            //调用weather组件的updateData函数
-            that.$refs.weather.updateData(that.weather);
+      that.$axios
+        .get("/surroundings/outdoor_weather")
+        .then((res) => {
+          if (res) {
+            res = res.data;
+            if (res.code == 1) {
+              console.log(res);
+              that.weather = res.data["weather"];
+              console.log(that.weather);
+              //调用weather组件的updateData函数
+              that.$refs.weather.updateData(that.weather);
+            }
           }
-        }
-        //获取到后端数据后,设置30秒的计时器，30秒后再次执行当前函数
-        setTimeout(function () {
-          that.getWeather();
-        }, 30000);
-      }).catch(function (error) {
+          //获取到后端数据后,设置30秒的计时器，30秒后再次执行当前函数
+          setTimeout(function () {
+            that.getWeather();
+          }, 30000);
+        })
+        .catch(function (error) {
           console.log("Indoor_temp遇到错误：\t" + error);
           setTimeout(function () {
             that.getFace();
@@ -206,11 +211,39 @@ export default {
           }, 5000);
         });
     },
+    getQR() {
+      var that = this;
+      that.$axios
+        .get("/surroundings/ip_qr", {
+          responseType: "arraybuffer",
+        })
+        .then((res) => {
+          if (res) {
+            let u =
+              "data:image/png;base64," +
+              btoa(
+                new Uint8Array(res.data).reduce(
+                  (data, byte) => data + String.fromCharCode(byte),
+                  ""
+                )
+              );
+            console.log(u)
+            that.pic = u;
+          }
+        })
+        .catch(function (error) {
+          console.log("qr_icon遇到错误：\t" + error);
+          setTimeout(function () {
+            that.getFace();
+          }, 5000);
+        });
+    },
   },
   //页面加载完毕后立刻执行的函数
   mounted() {
     this.getTemperature();
     this.getWeather();
+    this.getQR();
   },
 };
 </script>
