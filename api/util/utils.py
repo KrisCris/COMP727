@@ -4,6 +4,8 @@ from flask import jsonify
 from picamera import PiCamera
 import time
 import requests
+import qrcode
+import base64
 
 
 def reply_json(code, msg=None, data=None):
@@ -96,3 +98,27 @@ def get_zero_clock():
     t = time.localtime(time.time())
     time1 = time.mktime(time.strptime(time.strftime('%Y-%m-%d 00:00:00', t),'%Y-%m-%d %H:%M:%S'))
     return time1
+
+
+def get_local_ip():
+    import socket
+    hostname = socket.gethostname()
+    local_ip = socket.gethostbyname(hostname)
+    print(local_ip)
+    return local_ip
+
+
+def gen_qrcode(text):
+    qr = qrcode.QRCode(
+        version=1,
+        box_size=10,
+        border=2)
+    qr.add_data(text)
+    qr.make(fit=True)
+    img = qr.make_image(fill='black', back_color='white')
+    img.save('picture/qrcode.jpg')
+    with open('picture/qrcode.jpg','rb') as f:
+        # b64 = base64.b64encode(f.read())
+        d = f.read()
+        f.close()
+        return d
