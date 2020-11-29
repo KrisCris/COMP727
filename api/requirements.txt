@@ -5,3 +5,7 @@ picamera~=1.13
 requests~=2.24.0
 numpy~=1.19.4
 RPi.GPIO~=0.7.0
+qrcode~=6.1
+pillow~=8.0.1
+Flask-Sockets~=0.2.1
+gpiozero~=1.5.1    
