@@ -16,22 +16,8 @@ class App extends StatelessWidget{
 
     return MaterialApp(
       home: new CoverPage(),
-      onGenerateRoute: (RouteSettings settings){
-        return MaterialPageRoute(builder: (context){
-          String routeName = settings.name;
-
-          print("genRoute: "+routeName);
-
-          if(routeName == '/main'){
-            return MainPage();
-          } else {
-            return CoverPage();
-          }
-        });
-      },
-
       routes: {
-        // "/dashboard": (context)=>Dashboard()
+        "/main": (context)=>MainPage(ModalRoute.of(context).settings.arguments)
       },
     );
   }
