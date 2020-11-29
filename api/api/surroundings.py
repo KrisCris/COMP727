@@ -1,9 +1,9 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, Response
 import requests
 from util.SC import SC
 from database.Surroundings import Surroundings
 
-from util.utils import reply_json, get_indoor_temp, get_outdoor_weather
+from util.utils import reply_json, get_indoor_temp, get_outdoor_weather, get_local_ip, gen_qrcode
 
 surroundings = Blueprint('surroundings', __name__)
 
@@ -62,3 +62,10 @@ def location():
                      SC['location']).json()
     print(r)
     return reply_json(1, data=r)
+
+
+@surroundings.route('/ip_qr',methods=['GET'])
+def ip_qr():
+    ip = get_local_ip()
+    qr = gen_qrcode(ip)
+    return Response(qr, mimetype="image/jpeg")
