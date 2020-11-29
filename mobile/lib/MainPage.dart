@@ -1,7 +1,6 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_sparkline/flutter_sparkline.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -13,8 +12,13 @@ import 'dart:convert';
 
 class MainPage extends StatefulWidget {
   final String title = 'SmartReminder';
-  final WebSocketChannel channel =
-      new IOWebSocketChannel.connect('ws://192.168.123.98:5050/mobile');
+  WebSocketChannel channel;
+
+  MainPage(WebSocketChannel c){
+    // this.channel = new IOWebSocketChannel.connect('ws://$link:5050/mobile');
+    this.channel = c;
+  }
+
 
   @override
   _MainPageState createState() => _MainPageState();
@@ -76,6 +80,7 @@ class _MainPageState extends State<MainPage> {
                 // }
                 for(int i = 0; i < 4; i++){
                   Map<String,int> emap = new Map.from(data['edata'][i]);
+                  this.emotionData[i].clear();
                   emap.forEach((key, value) {
                     this.emotionData[i].add(EmotionData(key, value));
                   });
