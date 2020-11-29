@@ -30,11 +30,11 @@ def echo_socket(ws):
             for work in worklist:
                 single_time = 0
                 if work.end_time is None:
-                    single_time = get_current_time()-work.begin_time
+                    continue
                 else:
                     single_time = work.end_time - work.begin_time
                 worktime += single_time
-
+                # print('s:'+str(single_time//60))
                 relative_time = work.begin_time-get_zero_clock()
                 beginH = relative_time // 3600
                 beginM = (relative_time % 3600)//60
@@ -46,14 +46,13 @@ def echo_socket(ws):
                     continue
                 working_data[t] = single_time
             worktime = worktime/3600
-
         from database.Emotions import Emotions
         edata = Emotions.get_periodic_emotion()
 
-
-        ws.send(str({'tmp':tmp, 'hmd':hmd, 'worktime':worktime, 'edata':edata, 'wdata':working_data}))  #发送数据
-        print(time.gmtime())
-        time.sleep(5)
+        data = {'tmp':tmp, 'hmd':hmd, 'worktime':worktime, 'edata':edata, 'wdata':working_data}
+        ws.send(str(data))  #发送数据
+        # print(data)
+        time.sleep(10)
 
 
 
