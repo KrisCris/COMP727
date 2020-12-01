@@ -21,7 +21,7 @@ def reply_json(code, msg=None, data=None):
 
 
 def captureFace():
-    camera = PiCamera()
+    camera = PiCamera() 
     time.sleep(1)
     camera.capture('picture/image.jpg')
     camera.close()

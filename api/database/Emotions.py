@@ -11,9 +11,9 @@ class Emotions(db.Model):
     emotion = db.Column(db.VARCHAR(255))
     time = db.Column(db.INTEGER)
 
-    def __init__(self, emotion):
+    def __init__(self, emotion, time = get_current_time()):
         self.emotion = emotion
-        self.time = get_current_time()
+        self.time = time
 
 
     def add(self):

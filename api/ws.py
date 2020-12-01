@@ -16,6 +16,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 @sockets.route('/mobile')
 def echo_socket(ws):
     while not ws.closed:
+        print('\n\n\n\n')
         db.session.commit()
         from database.Surroundings import Surroundings
         s = Surroundings.get_latest_indoor()
@@ -30,11 +31,11 @@ def echo_socket(ws):
             for work in worklist:
                 single_time = 0
                 if work.end_time is None:
-                    continue
+                    single_time = get_current_time()-work.begin_time
                 else:
                     single_time = work.end_time - work.begin_time
                 worktime += single_time
-                # print('s:'+str(single_time//60))
+                print('s:'+str(single_time//60))
                 relative_time = work.begin_time-get_zero_clock()
                 beginH = relative_time // 3600
                 beginM = (relative_time % 3600)//60

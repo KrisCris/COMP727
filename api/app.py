@@ -18,11 +18,11 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://%s:%s@%s:%s/%s' % (
     DB_USERNAME, DB_PASSWORD, DB_ADDRESS, DB_PORT, DATABASE)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_POOL_SIZE'] = 100
 
 app.register_blueprint(surroundings, url_prefix='/surroundings')
 app.register_blueprint(emotions, url_prefix='/emotions')
 app.register_blueprint(working, url_prefix='/working')
-
 
 if __name__ == '__main__':
     with app.app_context():
