@@ -59,6 +59,7 @@ class CoverState extends State<CoverPage> {
         builder: (context, snapShot) {
           if(snapShot.hasData){
             String link = snapShot.data;
+            print(link);
             WebSocketChannel c = new IOWebSocketChannel.connect('ws://$link:5050/mobile');
             c.sink.add('try to connect!');
             Future.delayed(Duration(milliseconds: 2500), () {
