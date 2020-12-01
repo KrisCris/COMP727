@@ -87,6 +87,7 @@ class _MainPageState extends State<MainPage> {
                 }
 
                 Map<String,int> wmap = new Map.from(data['wdata']);
+                this.workingData.clear();
                 wmap.forEach((key, value) {
                   this.workingData.add(WorkingData(key, value));
                 });
