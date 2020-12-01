@@ -161,13 +161,13 @@ export default {
               that.$refs.weather.updateData(that.weather);
             }
           }
-          //获取到后端数据后,设置30秒的计时器，30秒后再次执行当前函数
+          //获取到后端数据后,设置10秒的计时器，10秒后再次执行当前函数
           setTimeout(function () {
             that.getWeather();
-          }, 30000);
+          }, 10000);
         })
         .catch(function (error) {
-          console.log("Indoor_temp遇到错误：\t" + error);
+          console.log("outdoor_temp遇到错误：\t" + error);
           setTimeout(function () {
             that.getFace();
           }, 5000);

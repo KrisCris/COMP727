@@ -88,10 +88,10 @@ export default {
             //发起workingTime事件，同时将0发送至外部
             that.$emit("workingTime", 0);
           }
-          //5秒后再次检测表情
+          //10秒后再次检测表情
           setTimeout(function () {
             that.getFace();
-          }, 5000);
+          }, 8000);
         })
         .catch(function (error) {
           console.log("遇到错误：\t" + error);
