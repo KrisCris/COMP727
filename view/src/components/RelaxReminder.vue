@@ -3,7 +3,7 @@
     <v-card elevation="3" outlined>
       <v-card-text>
         <p
-          v-text="'Your are working ' + existsTime + ' continuously'"
+          v-text="'Your have been working ' + existsTime + ' continuously'"
           style="margin-right: 15px"
           v-show="init"
         ></p>
