@@ -42,8 +42,8 @@ class _MainPageState extends State<MainPage> {
   int actualChart = 0;
 
   double workingHour = 0;
-  double temperature = 26.4;
-  double humidity = 47;
+  double temperature = 0;
+  double humidity = 0;
   List<WorkingData> workingData = [];
   List<List<EmotionData>> emotionData = [[],[],[],[]];
 
