@@ -25,7 +25,8 @@ export default {
   data: () => ({
     init:false,
     existsTime: "0",
-    remindText: "It seems you need take a rest :)",
+    remindReason:["Time to take a rest","You seems tired, take a rest"],
+    remindText: "",
     needRemind: false,
     threshouldTime: 30,
     remindGap: 30,
@@ -78,9 +79,14 @@ export default {
       this.notRelax += 1;
       return bl;
     },
-    remind() {
+    remind(type) {
       this.needRemind = true;
       var that = this;
+      if(type == 1){
+        that.remindText = this.remindReason[1]
+      }else{
+        that.remindText = this.remindReason[0]
+      }
       that.$axios.get("/emotions/playSong")
     },
   },

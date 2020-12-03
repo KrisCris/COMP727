@@ -141,8 +141,8 @@ export default {
       //调用reminder组件的formatDate函数
       this.$refs.reminder.formatDate(date);
     },
-    emotionRemind() {
-      this.$refs.reminder.remind();
+    emotionRemind(type) {
+      this.$refs.reminder.remind(type);
     },
     //获取天气
     getWeather() {

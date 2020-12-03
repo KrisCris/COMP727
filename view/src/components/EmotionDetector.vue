@@ -80,7 +80,7 @@ export default {
               that.$emit("updateChart", time, emotionCode);
             }
             if (that.shouldRest) {
-              that.$emit("shouldRest");
+              that.$emit("shouldRest",1);
             }
             //发起workingTime事件，同时将res.data.begin_time发送至外部
             that.$emit("workingTime", res.data.begin_time);
