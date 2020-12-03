@@ -148,7 +148,7 @@ def getEmotion():
     work_duration = current_time - begin_time
 
     # if more than 20% of the expression captured are negative and user have worked more than 40mins, he/she should take a rest
-    if rate > 0.2 and work_duration > 60*40:
+    if rate > 0.1 and work_duration > 60*40:
         shouldRest = True
     
     # successfully detected face - working;
