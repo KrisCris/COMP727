@@ -8,8 +8,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'dart:convert';
 
-// import 'shop_items_page.dart';
-
 class MainPage extends StatefulWidget {
   final String title = 'SmartReminder';
   WebSocketChannel channel;
@@ -18,7 +16,6 @@ class MainPage extends StatefulWidget {
     // this.channel = new IOWebSocketChannel.connect('ws://$link:5050/mobile');
     this.channel = c;
   }
-
 
   @override
   _MainPageState createState() => _MainPageState();
@@ -71,13 +68,6 @@ class _MainPageState extends State<MainPage> {
                 this.temperature = data['tmp'];
                 this.humidity = data['hmd'];
                 this.workingHour = data['worktime'];
-                // for (int i = 0; i < 4; i++) {
-                //   charts[i].clear();
-                //   List<double> l = data['edata'][i].cast<double>();
-                //   for (double j in l) {
-                //     charts[i].add(j);
-                //   }
-                // }
                 for(int i = 0; i < 4; i++){
                   Map<String,int> emap = new Map.from(data['edata'][i]);
                   this.emotionData[i].clear();
@@ -92,6 +82,7 @@ class _MainPageState extends State<MainPage> {
                   this.workingData.add(WorkingData(key, value));
                 });
               }
+
               return StaggeredGridView.count(
                 crossAxisCount: 2,
                 crossAxisSpacing: 12.0,
@@ -195,11 +186,6 @@ class _MainPageState extends State<MainPage> {
                                   children: <Widget>[
                                     Text('Happiness (Higher the better)',
                                         style: TextStyle(color: Colors.green)),
-                                    // Text('',
-                                    //     style: TextStyle(
-                                    //         color: Colors.black,
-                                    //         fontWeight: FontWeight.w700,
-                                    //         fontSize: 34.0)),
                                   ],
                                 ),
                                 DropdownButton(
@@ -322,6 +308,7 @@ class _MainPageState extends State<MainPage> {
     super.dispose();
   }
 }
+
 class WorkingData {
   WorkingData(this.time, this.hours);
   final String time;
